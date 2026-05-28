@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CutePupz 🐶</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background: #1a0a1e;
+      color: #f0e6f6;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      padding: 2rem 1rem;
+      gap: 1.5rem;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #ff69b4, #c084fc, #ff69b4);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shine 3s linear infinite;
+    }
+
+    @keyframes shine {
+      to { background-position: 200% center; }
+    }
+
+    p.tagline {
+      font-size: 0.95rem;
+      color: #888;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    button#sickpupz-btn {
+      margin-top: 0.5rem;
+      padding: 0.85rem 2.5rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ff69b4, #a855f7);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(255, 105, 180, 0.45);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.2s;
+    }
+
+    button#sickpupz-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(255, 105, 180, 0.6);
+    }
+
+    button#sickpupz-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    button#sickpupz-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    #sickpupz-status {
+      min-height: 1.2em;
+      font-size: 0.85rem;
+      color: #aaa;
+      text-align: center;
+    }
+
+    #sickpupz-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    #sickpupz-grid img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      animation: fadeIn 0.4s ease both;
+    }
+
+    #sickpupz-grid img:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.7);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    #sickpupz-grid img:nth-child(2) { animation-delay: 0.08s; }
+    #sickpupz-grid img:nth-child(3) { animation-delay: 0.16s; }
+    #sickpupz-grid img:nth-child(4) { animation-delay: 0.24s; }
+
+    footer {
+      margin-top: auto;
+      padding-top: 2rem;
+      font-size: 0.75rem;
+      color: #444;
+    }
+
+    @media (max-width: 480px) {
+      #sickpupz-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>CutePupz 🐶</h1>
+  <p class="tagline">For Mom / Grammy from BSL</p>
+
+  <button id="sickpupz-btn" onclick="fetchPupz()">🐾 Your Paw Goes Here</button>
+
+  <p id="sickpupz-status"></p>
+
+  <div id="sickpupz-grid"></div>
+
+  <footer>Powered by <a href="https://dog.ceo" style="color:#ff69b4;text-decoration:none;">dog.ceo</a></footer>
+
+  <script>
+    function fetchPupz() {
+      var btn    = document.getElementById('sickpupz-btn');
+      var grid   = document.getElementById('sickpupz-grid');
+      var status = document.getElementById('sickpupz-status');
+      btn.disabled = true;
+      btn.textContent = '🐶 Fetching...';
+      status.textContent = '';
+      fetch('https://dog.ceo/api/breeds/image/random/4')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          grid.innerHTML = '';
+          (data.message || []).forEach(function(url) {
+            var img = document.createElement('img');
+            img.src = url;
+            img.alt = 'Good dog';
+            img.title = 'Good dog';
+            grid.appendChild(img);
+          });
+          status.textContent = 'Smash button forever for the best pups!';
+          btn.disabled = false;
+          btn.textContent = '🐾 Your Paw Goes Here';
+        })
+        .catch(function() {
+          status.textContent = 'Pupz unavailable — check your connection.';
+          btn.disabled = false;
+          btn.textContent = '🐾 Your Paw Goes Here';
+        });
+    }
+
+    // Auto-load on arrival
+    fetchPupz();
+  </script>
+
+</body>
+</html>
